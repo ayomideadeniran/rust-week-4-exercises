@@ -149,7 +149,9 @@ pub fn parse_cli_args(args: &[String]) -> Result<CliCommand, BitcoinError> {
             Ok(CliCommand::Send { amount, address })
         }
         Some("balance") => {
-            if args.len() != 1 { return Err(BitcoinError::ParseError("Usage: balance".to_string())); }
+            if args.len() != 1 {
+                return Err(BitcoinError::ParseError("Usage: balance".to_string()));
+            }
             Ok(CliCommand::Balance)
         }
         _ => Err(BitcoinError::ParseError("Invalid command".to_string())),
@@ -177,11 +179,13 @@ impl TryFrom<&[u8]> for LegacyTransaction {
         let version = i32::from_le_bytes(data[offset..offset + 4].try_into().unwrap());
         offset += 4;
 
-        let inputs_count = u32::from_le_bytes(data[offset..offset + 4].try_into().unwrap()) as usize;
+        let inputs_count =
+            u32::from_le_bytes(data[offset..offset + 4].try_into().unwrap()) as usize;
         offset += 4;
 
         //For simplicity in this exercise we are not decoding inputs and outputs
-        let outputs_count = u32::from_le_bytes(data[offset..offset + 4].try_into().unwrap()) as usize;
+        let outputs_count =
+            u32::from_le_bytes(data[offset..offset + 4].try_into().unwrap()) as usize;
         offset += 4;
 
         let lock_time = u32::from_le_bytes(data[offset..offset + 4].try_into().unwrap());
